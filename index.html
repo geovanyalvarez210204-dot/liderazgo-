@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liderar con Comunicación Asertiva · Lic. Brayan Alvarez</title>
+<style>
+  /* ============================================================
+     PALETA Y VARIABLES (mejorada y más vibrante)
+     ============================================================ */
+  :root{
+    --azul:        #1e3a5f;
+    --azul-vivo:   #2d6cb5;
+    --azul-deep:   #0a1626;
+    --azul-noche:  #061020;
+    --cyan:        #4dd0e1;
+    --dorado:      #c9a227;
+    --dorado-br:   #ffd966;
+    --coral:       #ff7a7a;
+    --menta:       #4ade80;
+    --blanco:      #ffffff;
+    --texto:       #eaf2fb;
+    --texto-suave: #b9cde3;
+    --linea:       rgba(255,255,255,.12);
+    --panel:       rgba(255,255,255,.06);
+    --panel-2:     rgba(255,255,255,.10);
+    --radio:       18px;
+  }
+
+  *{ box-sizing: border-box; }
+  html, body{ height: 100%; }
+
+  body{
+    margin: 0;
+    font-family: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--blanco);
+    background: var(--azul-deep);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ============================================================
+     FONDO: mesh aurora + detalles geométricos + partículas
+     ============================================================ */
+  body::before{
+    content: "";
+    position: fixed; inset: -20%; z-index: -3;
+    background:
+      radial-gradient(700px 520px at 15% 20%,  rgba(77,208,225,.22), transparent 60%),
+      radial-gradient(760px 560px at 85% 15%,  rgba(201,162,39,.18), transparent 62%),
+      radial-gradient(820px 640px at 80% 90%,  rgba(45,108,181,.32), transparent 65%),
+      radial-gradient(720px 560px at 12% 88%,  rgba(255,122,122,.10), transparent 60%),
+      linear-gradient(140deg, #061020 0%, #0f2540 45%, #1e3a5f 100%);
+    animation: auroraMove 24s ease-in-out infinite alternate;
+  }
+  @keyframes auroraMove{
+    0%  { transform: translate3d(0,0,0) scale(1); }
+    100%{ transform: translate3d(-2%, 2%, 0) scale(1.06); }
+  }
+
+  .deco{
+    position: fixed; inset: 0; z-index: -2;
+    overflow: hidden; pointer-events: none;
+  }
+  .deco span{ position: absolute; display: block; }
+
+  .deco .c1{
+    width: 560px; height: 560px; border-radius: 50%;
+    border: 1px solid rgba(255,217,102,.22);
+    top: -180px; right: -150px;
+    animation: flotar 16s ease-in-out infinite;
+  }
+  .deco .c2{
+    width: 380px; height: 380px; border-radius: 50%;
+    border: 1px solid rgba(77,208,225,.22);
+    bottom: -140px; left: -120px;
+    animation: flotar 20s ease-in-out infinite reverse;
+  }
+  .deco .c3{
+    width: 220px; height: 220px; border-radius: 50%;
+    border: 1px dashed rgba(255,255,255,.10);
+    top: 60%; right: 8%;
+    animation: spin 60s linear infinite;
+  }
+  .deco .s1{
+    width: 260px; height: 260px;
+    border: 1px solid rgba(201,162,39,.15);
+    transform: rotate(26deg);
+    bottom: 6%; right: 5%;
+    animation: flotar 22s ease-in-out infinite;
+  }
+  .deco .s2{
+    width: 140px; height: 140px;
+    background: rgba(255,255,255,.03);
+    transform: rotate(45deg);
+    top: 16%; left: 4%;
+    animation: spin 80s linear infinite reverse;
+  }
+  .deco .linea-diag{
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      -45deg,
+      rgba(255,255,255,.03) 0 1px,
+      transparent 1px 100px
+    );
+  }
+  .deco .glow{
+    width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,217,102,.10), transparent 65%);
+    top: 40%; left: 40%;
+    animation: flotar 18s ease-in-out infinite;
+  }
+
+  @keyframes flotar{
+    0%,100%{ transform: translateY(0) rotate(0deg); }
+    50%    { transform: translateY(-26px) rotate(2deg); }
+  }
+  @keyframes spin{
+    from{ transform: rotate(0deg); }
+    to  { transform: rotate(360deg); }
+  }
+
+  /* Partículas flotantes */
+  .particles{ position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+  .particles i{
+    position: absolute;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--dorado-br);
+    box-shadow: 0 0 10px var(--dorado-br);
+    opacity: .45;
+    animation: subir linear infinite;
+  }
+  @keyframes subir{
+    from{ transform: translateY(100vh) scale(.6); opacity: 0; }
+    15% { opacity: .6; }
+    85% { opacity: .6; }
+    to  { transform: translateY(-10vh) scale(1.1); opacity: 0; }
+  }
+
+  /* ============================================================
+     BARRA DE PROGRESO SUPERIOR
+     ============================================================ */
+  .progress-top{
+    position: fixed; top: 0; left: 0; right: 0; height: 4px;
+    background: rgba(255,255,255,.08);
+    z-index: 40;
+  }
+  .progress-fill{
+    height: 100%; width: 0;
+    background: linear-gradient(90deg, var(--cyan) 0%, var(--dorado-br) 55%, var(--dorado) 100%);
+    box-shadow: 0 0 16px rgba(255,217,102,.75);
+    transition: width .5s cubic-bezier(.22,.61,.36,1);
+  }
+
+  /* ============================================================
+     DIAPOSITIVAS
+     ============================================================ */
+  .slide{
+    position: fixed; inset: 0;
+    display: flex;
+    padding: clamp(1.8rem, 4.5vh, 3.4rem) clamp(1.4rem, 5.5vw, 5.5rem) clamp(6rem, 13vh, 7.5rem);
+    overflow-y: auto;
+    overflow-x: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(34px) scale(.985);
+    transition:
+      opacity .6s ease,
+      transform .6s cubic-bezier(.22,.61,.36,1),
+      visibility 0s linear .6s;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,217,102,.5) transparent;
+  }
+  .slide::-webkit-scrollbar{ width: 8px; }
+  .slide::-webkit-scrollbar-thumb{
+    background: rgba(255,217,102,.45); border-radius: 8px;
+  }
+
+  .slide.is-active{
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition:
+      opacity .6s ease,
+      transform .6s cubic-bezier(.22,.61,.36,1),
+      visibility 0s linear 0s;
+  }
+
+  .content{
+    margin: auto;
+    width: 100%;
+    max-width: 1200px;
+  }
+  .content.center{ text-align: center; }
+  .content.center .rule{ margin-left: auto; margin-right: auto; }
+
+  /* Layout de dos columnas (texto + ilustración) */
+  .split{
+    display: grid;
+    grid-template-columns: 1.15fr .85fr;
+    gap: clamp(1.2rem, 3vw, 2.6rem);
+    align-items: center;
+  }
+  .split.rev{ grid-template-columns: .85fr 1.15fr; }
+  .split.rev .visual{ order: -1; }
+  @media (max-width: 900px){
+    .split, .split.rev{ grid-template-columns: 1fr; }
+    .split.rev .visual{ order: 0; }
+  }
+
+  .visual{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: floatIn .8s cubic-bezier(.22,.61,.36,1) both;
+  }
+  .visual svg{
+    width: 100%;
+    height: auto;
+    max-height: 420px;
+    filter: drop-shadow(0 18px 40px rgba(0,0,0,.35));
+  }
+  @keyframes floatIn{
+    from{ opacity: 0; transform: translateY(20px) scale(.95); }
+    to  { opacity: 1; transform: none; }
+  }
+
+  /* ============================================================
+     TIPOGRAFÍA
+     ============================================================ */
+  .eyebrow{
+    margin: 0 0 .9rem;
+    font-size: clamp(.7rem, .95vw, .9rem);
+    font-weight: 700;
+    letter-spacing: .32em;
+    text-transform: uppercase;
+    color: var(--dorado-br);
+    text-shadow: 0 0 18px rgba(255,217,102,.4);
+  }
+
+  h1{
+    margin: 0 0 1rem;
+    font-size: clamp(2rem, 5.2vw, 4.2rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -.02em;
+    background: linear-gradient(120deg, #ffffff 0%, #e6f0fb 45%, var(--dorado-br) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 4px 22px rgba(0,0,0,.35));
+  }
+  h1 .gold{ color: var(--dorado-br); -webkit-text-fill-color: var(--dorado-br); }
+
+  .subtitle{
+    margin: 0 auto 1.6rem;
+    max-width: 780px;
+    font-size: clamp(1rem, 1.55vw, 1.3rem);
+    line-height: 1.55;
+    color: var(--texto-suave);
+    font-weight: 400;
+  }
+
+  .rule{
+    width: 100px; height: 4px; border-radius: 3px;
+    background: linear-gradient(90deg, var(--cyan), var(--dorado-br));
+    margin: 0 0 1.5rem;
+    box-shadow: 0 0 20px rgba(255,217,102,.5);
+  }
+
+  .slide-head{ margin-bottom: clamp(1rem, 2.6vh, 1.9rem); }
+  .slide-head h2{
+    margin: 0;
+    font-size: clamp(1.3rem, 2.85vw, 2.25rem);
+    font-weight: 800;
+    line-height: 1.18;
+    letter-spacing: -.01em;
+    background: linear-gradient(120deg, #ffffff 0%, #e6f0fb 60%, var(--dorado-br) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .slide-head .ico{
+    margin-right: .55rem;
+    font-size: .95em;
+    -webkit-text-fill-color: initial;
+    filter: drop-shadow(0 3px 10px rgba(255,217,102,.4));
+  }
+  .slide-head .rule{ margin-top: .9rem; margin-bottom: 0; }
+
+  .author{
+    margin: .3rem 0 .2rem;
+    font-size: clamp(.95rem, 1.35vw, 1.2rem);
+    color: var(--texto-suave);
+    letter-spacing: .04em;
+  }
+  .author strong{ color: var(--blanco); }
+
+  .hint{
+    margin: 2rem 0 0;
+    font-size: clamp(.72rem, .95vw, .86rem);
+    color: rgba(234,242,251,.55);
+    letter-spacing: .08em;
+  }
+  .hint kbd{
+    display: inline-block;
+    padding: .12em .5em;
+    margin: 0 .12em;
+    border: 1px solid rgba(255,255,255,.25);
+    border-bottom-width: 2px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: .92em;
+    color: var(--texto);
+    background: rgba(255,255,255,.06);
+  }
+
+  /* ============================================================
+     LISTAS
+     ============================================================ */
+  ul.bullets{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: clamp(.5rem, 1.3vh, .9rem);
+  }
+  ul.bullets li{
+    position: relative;
+    padding-left: 2rem;
+    font-size: clamp(.9rem, 1.25vw, 1.15rem);
+    line-height: 1.52;
+    color: var(--texto);
+  }
+  ul.bullets li::before{
+    content: "";
+    position: absolute;
+    left: .42rem; top: .56em;
+    width: .5rem; height: .5rem;
+    background: linear-gradient(135deg, var(--dorado-br), var(--dorado));
+    border-radius: 2px;
+    transform: rotate(45deg);
+    box-shadow: 0 0 10px rgba(255,217,102,.6);
+  }
+  ul.bullets li strong{ color: var(--blanco); font-weight: 700; }
+  ul.bullets li .gold{ color: var(--dorado-br); font-weight: 600; }
+
+  .slide.is-active ul.bullets li{
+    animation: fadeUp .5s cubic-bezier(.22,.61,.36,1) both;
+  }
+  .slide.is-active ul.bullets li:nth-child(1){ animation-delay: .10s; }
+  .slide.is-active ul.bullets li:nth-child(2){ animation-delay: .18s; }
+  .slide.is-active ul.bullets li:nth-child(3){ animation-delay: .26s; }
+  .slide.is-active ul.bullets li:nth-child(4){ animation-delay: .34s; }
+  .slide.is-active ul.bullets li:nth-child(5){ animation-delay: .42s; }
+  .slide.is-active ul.bullets li:nth-child(6){ animation-delay: .50s; }
+  .slide.is-active ul.bullets li:nth-child(7){ animation-delay: .58s; }
+
+  @keyframes fadeUp{
+    from{ opacity: 0; transform: translateY(16px); }
+    to  { opacity: 1; transform: none; }
+  }
+
+  /* ============================================================
+     CAJA DE DEFINICIÓN / CITA
+     ============================================================ */
+  .quote{
+    position: relative;
+    margin: 0 0 clamp(.9rem, 2.4vh, 1.5rem);
+    padding: clamp(.95rem, 2.2vw, 1.4rem) clamp(1.1rem, 2.4vw, 1.8rem);
+    border-left: 5px solid var(--dorado-br);
+    border-radius: 0 16px 16px 0;
+    background: linear-gradient(90deg, rgba(255,217,102,.16), rgba(77,208,225,.05) 60%, rgba(255,255,255,.03));
+    font-size: clamp(.92rem, 1.35vw, 1.18rem);
+    line-height: 1.55;
+    color: #f2f7fc;
+    font-style: italic;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+  }
+  .quote strong{ font-style: normal; color: var(--dorado-br); }
+
+  /* ============================================================
+     TARJETAS
+     ============================================================ */
+  .cards{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+    gap: clamp(.65rem, 1.4vw, 1rem);
+  }
+  .cards.two{ grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+
+  .card{
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(160deg, rgba(255,255,255,.09), rgba(255,255,255,.03));
+    border: 1px solid var(--linea);
+    border-top: 3px solid var(--dorado-br);
+    border-radius: var(--radio);
+    padding: clamp(.85rem, 1.8vw, 1.25rem) clamp(.9rem, 2vw, 1.3rem);
+    transition: transform .3s ease, background .3s ease, border-color .3s ease, box-shadow .3s ease;
+  }
+  .card::after{
+    content: "";
+    position: absolute; inset: -1px;
+    border-radius: inherit;
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.09) 50%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform .8s ease;
+    pointer-events: none;
+  }
+  .card:hover{
+    transform: translateY(-5px);
+    background: linear-gradient(160deg, rgba(255,255,255,.14), rgba(255,255,255,.05));
+    border-color: rgba(255,217,102,.5);
+    box-shadow: 0 18px 40px rgba(0,0,0,.35), 0 0 0 1px rgba(255,217,102,.18);
+  }
+  .card:hover::after{ transform: translateX(120%); }
+
+  .card .ico{
+    display: block;
+    font-size: 1.55rem;
+    line-height: 1;
+    margin-bottom: .5rem;
+    filter: drop-shadow(0 3px 8px rgba(255,217,102,.35));
+  }
+  .card h3{
+    margin: 0 0 .45rem;
+    font-size: clamp(.9rem, 1.18vw, 1.1rem);
+    font-weight: 700;
+    color: var(--blanco);
+    line-height: 1.3;
+  }
+  .card p{
+    margin: 0;
+    font-size: clamp(.78rem, 1vw, .96rem);
+    line-height: 1.48;
+    color: var(--texto-suave);
+  }
+
+  /* ============================================================
+     TABLA COMPARATIVA
+     ============================================================ */
+  .table-wrap{
+    overflow-x: auto;
+    border-radius: var(--radio);
+    border: 1px solid var(--linea);
+    background: rgba(255,255,255,.03);
+    -webkit-overflow-scrolling: touch;
+  }
+  table.compare{
+    width: 100%;
+    min-width: 700px;
+    border-collapse: collapse;
+    font-size: clamp(.78rem, 1.05vw, 1rem);
+  }
+  table.compare th,
+  table.compare td{
+    padding: clamp(.6rem, 1.3vw, 1rem) clamp(.7rem, 1.5vw, 1.1rem);
+    text-align: left;
+    vertical-align: top;
+    line-height: 1.45;
+  }
+  table.compare thead th{
+    background: rgba(255,255,255,.08);
+    color: var(--dorado-br);
+    font-size: .78em;
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border-bottom: 2px solid rgba(255,217,102,.55);
+    white-space: nowrap;
+  }
+  table.compare tbody tr{ background: rgba(255,255,255,.025); transition: background .25s; }
+  table.compare tbody tr:hover{ background: rgba(255,255,255,.07); }
+  table.compare tbody tr + tr td{ border-top: 1px solid var(--linea); }
+  table.compare td:first-child{
+    font-weight: 800;
+    color: var(--blanco);
+    white-space: nowrap;
+    border-left: 4px solid transparent;
+    font-size: 1.05em;
+  }
+  table.compare tr.fila-pasiva   td:first-child{ border-left-color: #7f96ad; color: #c8d6e5; }
+  table.compare tr.fila-agresiva td:first-child{ border-left-color: var(--coral); color: #ffc4c4; }
+  table.compare tr.fila-asertiva td:first-child{ border-left-color: var(--dorado-br); color: var(--dorado-br); }
+  table.compare tr.fila-asertiva{ background: linear-gradient(90deg, rgba(255,217,102,.16), rgba(255,217,102,.04)) !important; }
+  table.compare td em{ font-style: normal; color: var(--texto-suave); }
+
+  .face{
+    display: inline-grid;
+    place-items: center;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    margin-right: .45rem;
+    font-size: .82rem;
+    font-weight: 800;
+    vertical-align: -3px;
+  }
+  .face.pasiva   { background: rgba(127,150,173,.35); color: #c8d6e5; }
+  .face.agresiva { background: rgba(255,122,122,.30); color: #ffc4c4; }
+  .face.asertiva { background: rgba(255,217,102,.35); color: var(--dorado-br); }
+
+  /* ============================================================
+     TARJETAS INTERACTIVAS (FLIP) - Casos
+     ============================================================ */
+  .flip-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+    gap: clamp(.8rem, 1.6vw, 1.15rem);
+  }
+  .flip-card{
+    perspective: 1400px;
+    height: clamp(180px, 24vh, 230px);
+    cursor: pointer;
+    animation: fadeUp .55s cubic-bezier(.22,.61,.36,1) both;
+  }
+  .flip-card:nth-child(1){ animation-delay: .10s; }
+  .flip-card:nth-child(2){ animation-delay: .20s; }
+  .flip-card:nth-child(3){ animation-delay: .30s; }
+  .flip-card:nth-child(4){ animation-delay: .40s; }
+
+  .flip-inner{
+    position: relative;
+    width: 100%; height: 100%;
+    transition: transform .75s cubic-bezier(.55,.15,.35,1);
+    transform-style: preserve-3d;
+  }
+  .flip-card.flipped .flip-inner{ transform: rotateY(180deg); }
+
+  .flip-face{
+    position: absolute; inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: var(--radio);
+    padding: clamp(.9rem, 1.7vw, 1.15rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: .4rem;
+    border: 1px solid var(--linea);
+    box-shadow: 0 14px 34px rgba(0,0,0,.35);
+  }
+  .flip-front{
+    background: linear-gradient(160deg, rgba(255,122,122,.14), rgba(255,122,122,.04));
+    border-top: 3px solid var(--coral);
+  }
+  .flip-back{
+    background: linear-gradient(160deg, rgba(74,222,128,.16), rgba(74,222,128,.04));
+    border-top: 3px solid var(--menta);
+    transform: rotateY(180deg);
+  }
+  .flip-face .tag{
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    opacity: .9;
+  }
+  .flip-front .tag{ color: #ffc4c4; }
+  .flip-back  .tag{ color: #b8f1c6; }
+
+  .flip-face h4{
+    margin: 0;
+    font-size: clamp(.85rem, 1.1vw, 1rem);
+    font-weight: 700;
+    color: var(--blanco);
+    line-height: 1.3;
+  }
+  .flip-face p{
+    margin: 0;
+    font-size: clamp(.76rem, .98vw, .92rem);
+    line-height: 1.42;
+    color: var(--texto-suave);
+  }
+  .flip-face .hint-flip{
+    margin-top: .35rem;
+    font-size: .66rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    opacity: .55;
+  }
+
+  /* ============================================================
+     PASOS (MÉTODO DESC) - Interactivo
+     ============================================================ */
+  .steps{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: clamp(.65rem, 1.4vw, 1rem);
+    margin-bottom: clamp(1rem, 2.4vh, 1.5rem);
+  }
+  .step{
+    position: relative;
+    background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+    border: 1px solid var(--linea);
+    border-radius: var(--radio);
+    padding: clamp(.85rem, 1.7vw, 1.15rem);
+    cursor: pointer;
+    transition: transform .25s ease, background .25s ease, box-shadow .25s ease, border-color .25s ease;
+    outline: none;
+  }
+  .step:hover,
+  .step:focus-visible{
+    transform: translateY(-5px);
+    background: linear-gradient(160deg, rgba(255,217,102,.16), rgba(255,255,255,.04));
+    border-color: rgba(255,217,102,.55);
+    box-shadow: 0 16px 34px rgba(0,0,0,.35);
+  }
+  .step.abierto{
+    background: linear-gradient(160deg, rgba(255,217,102,.20), rgba(255,255,255,.05));
+    border-color: var(--dorado-br);
+  }
+  .step .letter{
+    display: inline-grid;
+    place-items: center;
+    width: 36px; height: 36px;
+    margin-bottom: .5rem;
+    border-radius: 50%;
+    background: linear-gradient(145deg, var(--dorado-br), var(--dorado));
+    color: #10243a;
+    font-weight: 900;
+    font-size: 1.05rem;
+    box-shadow: 0 6px 18px rgba(255,217,102,.45);
+  }
+  .step h3{
+    margin: 0 0 .3rem;
+    font-size: clamp(.85rem, 1.1vw, 1rem);
+    font-weight: 700;
+    color: var(--blanco);
+  }
+  .step .detalle{
+    margin: 0;
+    font-size: clamp(.74rem, .95vw, .9rem);
+    line-height: 1.45;
+    color: var(--texto-suave);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height .45s ease, opacity .35s ease, margin .35s ease;
+  }
+  .step.abierto .detalle{
+    max-height: 220px;
+    opacity: 1;
+    margin-top: .4rem;
+  }
+  .step .detalle em{ color: var(--dorado-br); font-style: italic; }
+
+  .mini-title{
+    margin: 0 0 .65rem;
+    font-size: clamp(.74rem, .95vw, .9rem);
+    font-weight: 800;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--dorado-br);
+  }
+
+  /* ============================================================
+     CIERRE / REFERENCIAS
+     ============================================================ */
+  .refs{ text-align: left; max-width: 900px; margin: 0 auto; }
+  ul.refs{ list-style: none; margin: 0; padding: 0; display: grid; gap: .45rem; }
+  ul.refs li{
+    position: relative;
+    padding-left: 1.4rem;
+    font-size: clamp(.76rem, 1vw, .93rem);
+    line-height: 1.5;
+    color: var(--texto-suave);
+  }
+  ul.refs li::before{
+    content: "▸";
+    position: absolute; left: 0;
+    color: var(--dorado-br);
+    font-weight: 800;
+  }
+  ul.refs li em{ color: var(--blanco); font-style: italic; }
+
+  .final-msg{
+    font-size: clamp(1.05rem, 1.9vw, 1.55rem);
+    line-height: 1.5;
+    font-weight: 600;
+    color: #f4f8fc;
+    max-width: 880px;
+    margin: 0 auto 1.6rem;
+    text-shadow: 0 4px 24px rgba(0,0,0,.4);
+  }
+  .final-msg .gold{ color: var(--dorado-br); }
+
+  /* ============================================================
+     CONTROLES DE NAVEGACIÓN
+     ============================================================ */
+  .controls{
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(.55rem, 1.5vw, 1rem);
+    padding: 1.1rem clamp(1rem, 4vw, 2.5rem) 1.15rem;
+    background: linear-gradient(to top, rgba(4,10,20,.95) 15%, rgba(4,10,20,0));
+    pointer-events: none;
+    flex-wrap: wrap;
+  }
+  .controls > *{ pointer-events: auto; }
+
+  button.nav{
+    font: inherit;
+    font-size: clamp(.76rem, .95vw, .92rem);
+    font-weight: 600;
+    letter-spacing: .03em;
+    color: var(--blanco);
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,217,102,.45);
+    border-radius: 999px;
+    padding: .6em 1.3em;
+    cursor: pointer;
+    transition: background .25s ease, border-color .25s ease,
+                transform .15s ease, box-shadow .25s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  button.nav:hover:not(:disabled){
+    background: rgba(255,217,102,.24);
+    border-color: var(--dorado-br);
+    box-shadow: 0 8px 24px rgba(255,217,102,.28);
+  }
+  button.nav:active:not(:disabled){ transform: scale(.955); }
+  button.nav:disabled{ opacity: .3; cursor: not-allowed; }
+  button.nav:focus-visible{
+    outline: 2px solid var(--dorado-br);
+    outline-offset: 3px;
+  }
+
+  .dots{
+    display: flex;
+    gap: .42rem;
+    align-items: center;
+    padding: 0 .35rem;
+  }
+  .dots button{
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    border: none;
+    padding: 0;
+    background: rgba(255,255,255,.22);
+    cursor: pointer;
+    transition: all .3s ease;
+  }
+  .dots button:hover{ background: rgba(255,217,102,.7); transform: scale(1.35); }
+  .dots button.activo{
+    background: var(--dorado-br);
+    box-shadow: 0 0 12px rgba(255,217,102,.85);
+    transform: scale(1.35);
+  }
+
+  .counter{
+    min-width: 78px;
+    text-align: center;
+    font-size: clamp(.8rem, 1vw, .98rem);
+    font-weight: 700;
+    letter-spacing: .12em;
+    color: rgba(234,242,251,.75);
+    font-variant-numeric: tabular-nums;
+    user-select: none;
+  }
+  .counter .actual{ color: var(--dorado-br); }
+
+  /* ============================================================
+     SVG ANIMACIONES
+     ============================================================ */
+  .pulse-dot{ animation: pulse 2.4s ease-in-out infinite; transform-origin: center; }
+  .pulse-dot.d2{ animation-delay: .4s; }
+  .pulse-dot.d3{ animation-delay: .8s; }
+  .pulse-dot.d4{ animation-delay: 1.2s; }
+  .pulse-dot.d5{ animation-delay: 1.6s; }
+  @keyframes pulse{
+    0%,100%{ transform: scale(1); opacity: .85; }
+    50%    { transform: scale(1.35); opacity: 1; }
+  }
+
+  .onda{ animation: onda 3.2s ease-out infinite; transform-origin: center; }
+  .onda.o2{ animation-delay: .6s; }
+  .onda.o3{ animation-delay: 1.2s; }
+  @keyframes onda{
+    0%  { transform: scale(.7); opacity: 0; }
+    25% { opacity: .7; }
+    100%{ transform: scale(1.5); opacity: 0; }
+  }
+
+  .girar-lento{ animation: spin 40s linear infinite; transform-origin: center; }
+  .girar-rev  { animation: spin 55s linear infinite reverse; transform-origin: center; }
+
+  .brillo-nodo{ animation: brilloNodo 3s ease-in-out infinite; }
+  @keyframes brilloNodo{
+    0%,100%{ opacity: .55; }
+    50%    { opacity: 1; }
+  }
+
+  .dibujar{
+    stroke-dasharray: 600;
+    stroke-dashoffset: 600;
+    animation: dibujar 2.2s ease-out forwards;
+  }
+  .dibujar.d2{ animation-delay: .3s; }
+  .dibujar.d3{ animation-delay: .6s; }
+  @keyframes dibujar{
+    to{ stroke-dashoffset: 0; }
+  }
+
+  /* ============================================================
+     RESPONSIVE
+     ============================================================ */
+  @media (max-width: 720px){
+    .slide{ padding: 1.8rem 1.2rem 8rem; }
+    .deco .s1, .deco .s2, .deco .c3{ display: none; }
+    .deco .c1{ width: 340px; height: 340px; top: -120px; right: -120px; }
+    .cards.two{ grid-template-columns: 1fr; }
+    .dots{ display: none; }
+  }
+
+  @media (max-height: 640px){
+    .slide{ padding-top: 1.4rem; padding-bottom: 6.5rem; }
+    .slide-head{ margin-bottom: .8rem; }
+    ul.bullets{ gap: .38rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{
+      animation-duration: .001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .001ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= FONDO DECORATIVO ================= -->
+<div class="deco" aria-hidden="true">
+  <span class="linea-diag"></span>
+  <span class="c1"></span>
+  <span class="c2"></span>
+  <span class="c3"></span>
+  <span class="s1"></span>
+  <span class="s2"></span>
+  <span class="glow"></span>
+</div>
+<div class="particles" id="particles" aria-hidden="true"></div>
+
+<!-- ================= BARRA DE PROGRESO ================= -->
+<div class="progress-top" aria-hidden="true">
+  <div class="progress-fill" id="progressFill"></div>
+</div>
+
+<main id="deck">
+
+  <!-- ============================================================
+       1. PORTADA
+       ============================================================ -->
+  <section class="slide is-active">
+    <div class="content">
+      <div class="split">
+        <div class="texto">
+          <p class="eyebrow">Gestión del Talento Humano</p>
+          <h1>Liderar con <span class="gold">Comunicación Asertiva</span></h1>
+          <p class="subtitle">
+            El impacto de la comunicación asertiva en la gestión del talento humano:
+            cómo las conversaciones de un líder construyen —o destruyen— el compromiso,
+            el clima y los resultados de un equipo.
+          </p>
+          <div class="rule"></div>
+          <p class="author">Presentado por: <strong>Lic. Brayan Alvarez</strong></p>
+          <p class="hint">
+            Navega con <kbd>←</kbd> <kbd>→</kbd>, la <kbd>barra espaciadora</kbd>
+            o los controles inferiores · <kbd>F</kbd> pantalla completa
+          </p>
+        </div>
+
+        <div class="visual" aria-hidden="true">
+          <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="g1" cx="50%" cy="50%">
+                <stop offset="0%" stop-color="#ffd966" stop-opacity=".9"/>
+                <stop offset="100%" stop-color="#c9a227" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#4dd0e1"/>
+                <stop offset="100%" stop-color="#2d6cb5"/>
+              </linearGradient>
+              <linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffd966"/>
+                <stop offset="100%" stop-color="#c9a227"/>
+              </linearGradient>
+            </defs>
+
+            <!-- ondas expansivas -->
+            <circle class="onda"    cx="200" cy="200" r="90"  fill="none" stroke="#ffd966" stroke-opacity=".5" stroke-width="1.5"/>
+            <circle class="onda o2" cx="200" cy="200" r="90"  fill="none" stroke="#4dd0e1" stroke-opacity=".5" stroke-width="1.5"/>
+            <circle class="onda o3" cx="200" cy="200" r="90"  fill="none" stroke="#ffd966" stroke-opacity=".5" stroke-width="1.5"/>
+
+            <!-- orbitas -->
+            <circle class="girar-lento" cx="200" cy="200" r="150" fill="none" stroke="rgba(255,255,255,.10)" stroke-dasharray="3 8"/>
+            <circle class="girar-rev"   cx="200" cy="200" r="120" fill="none" stroke="rgba(255,217,102,.18)" stroke-dasharray="2 10"/>
+
+            <!-- halo central -->
+            <circle cx="200" cy="200" r="70" fill="url(#g1)"/>
+            <circle cx="200" cy="200" r="58" fill="none" stroke="#ffd966" stroke-opacity=".6" stroke-width="1.5"/>
+
+            <!-- figura lider (silueta estilizada) -->
+            <circle cx="200" cy="185" r="16" fill="url(#g3)"/>
+            <path d="M170 232 Q170 208 200 208 Q230 208 230 232 L230 244 L170 244 Z" fill="url(#g2)"/>
+
+            <!-- equipo en orbita -->
+            <g>
+              <circle class="pulse-dot"    cx="200" cy="50"  r="11" fill="#4dd0e1"/>
+              <circle class="pulse-dot d2" cx="330" cy="130" r="10" fill="#ffd966"/>
+              <circle class="pulse-dot d3" cx="330" cy="270" r="10" fill="#4dd0e1"/>
+              <circle class="pulse-dot d4" cx="200" cy="350" r="11" fill="#ffd966"/>
+              <circle class="pulse-dot d5" cx="70"  cy="270" r="10" fill="#4dd0e1"/>
+              <circle class="pulse-dot"    cx="70"  cy="130" r="10" fill="#ffd966"/>
+            </g>
+
+            <!-- lineas de conexion -->
+            <g stroke="rgba(255,217,102,.32)" stroke-width="1.2" fill="none">
+              <line x1="200" y1="200" x2="200" y2="50"/>
+              <line x1="200" y1="200" x2="330" y2="130"/>
+              <line x1="200" y1="200" x2="330" y2="270"/>
+              <line x1="200" y1="200" x2="200" y2="350"/>
+              <line x1="200" y1="200" x2="70"  y2="270"/>
+              <line x1="200" y1="200" x2="70"  y2="130"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       2. INTRODUCCIÓN
+       ============================================================ -->
+  <section class="slide">
+    <div class="content">
+      <div class="slide-head">
+        <h2><span class="ico">🧭</span>¿Qué es la Gestión del Talento Humano?</h2>
+        <div class="rule"></div>
+      </div>
+
+      <div class="split">
+        <div class="texto">
+          <div class="quote">
+            Es el conjunto de <strong>políticas y prácticas</strong> mediante las cuales una
+            organización <strong>atrae, desarrolla, motiva y retiene</strong> a las personas
+            que generan valor para el negocio.
+          </div>
+
+          <ul class="bullets">
+            <li><strong>Ciclo de vida completo:</strong> atracción, selección, inducción, desarrollo, evaluación, compensación y desvinculación.</li>
+            <li><strong>Visión estratégica:</strong> alinea el talento con los objetivos del negocio.</li>
+            <li><strong>Las personas son el motor:</strong> fuente principal de ventaja competitiva sostenible.</li>
+            <li><strong>Punto crítico:</strong> su éxito depende de la <span class="gold">calidad de la comunicación</span> líder-colaborador.</li>
+          </ul>
+        </div>
+
+        <div class="visual" aria-hidden="true">
+          <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="cy1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#4dd0e1"/>
+                <stop offset="100%" stop-color="#2d6cb5"/>
+              </linearGradient>
+              <linearGradient id="cy2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffd966"/>
+                <stop offset="100%" stop-color="#c9a227"/>
+              </linearGradient>
+            </defs>
+
+            <circle class="girar-lento" cx="200" cy="200" r="150" fill="none" stroke="rgba(255,255,255,.12)" stroke-dasharray="4 10"/>
+            <circle class="girar-rev"   cx="200" cy="200" r="120" fill="none" stroke="rgba(255,217,102,.22)" stroke-dasharray="2 8"/>
+
+            <!-- centro -->
+            <circle cx="200" cy="200" r="52" fill="url(#cy2)" opacity=".95"/>
+            <text x="200" y="196" text-anchor="middle" font-size="16" font-weight="800" fill="#10243a">TALENTO</text>
+            <text x="200" y="216" text-anchor="middle" font-size="11" font-weight="700" fill="#10243a">HUMANO</text>
+
+            <!-- nodos del ciclo -->
+            <g font-family="system-ui" font-size="11" font-weight="700" text-anchor="middle" fill="#eaf2fb">
+              <circle class="pulse-dot"    cx="200" cy="50"  r="26" fill="url(#cy1)"/>
+              <text x="200" y="54">Atraer</text>
+
+              <circle class="pulse-dot d2" cx="322" cy="125" r="26" fill="url(#cy2)"/>
+              <text x="322" y="129">Seleccionar</text>
+
+              <circle class="pulse-dot d3" cx="322" cy="275" r="26" fill="url(#cy1)"/>
+              <text x="322" y="279">Desarrollar</text>
+
+              <circle class="pulse-dot d4" cx="200" cy="350" r="26" fill="url(#cy2)"/>
+              <text x="200" y="354">Motivar</text>
+
+              <circle class="pulse-dot d5" cx="78"  cy="275" r="26" fill="url(#cy1)"/>
+              <text x="78"  y="279">Retener</text>
+
+              <circle class="pulse-dot"    cx="78"  cy="125" r="26" fill="url(#cy2)"/>
+              <text x="78"  y="129">Evaluar</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       3. IMPORTANCIA DEL LIDERAZGO
+       ============================================================ -->
+  <section class="slide">
+    <div class="content">
+      <div class="slide-head">
+        <h2><span class="ico">👔</span>Importancia del Liderazgo en RRHH</h2>
+        <div class="rule"></div>
+      </div>
+
+      <div class="split rev">
+        <div class="texto">
+          <ul class="bullets">
+            <li><strong>Puente estratégico:</strong> traduce la estrategia organizacional en tareas claras, prioridades y expectativas medibles.</li>
+            <li><strong>Define el clima:</strong> su comportamiento marca lo que se tolera, lo que se premia y lo que se calla.</li>
+            <li><strong>Gestiona emociones:</strong> un liderazgo ausente o agresivo produce rumores y rotación.</li>
+            <li><strong>Conversaciones difíciles:</strong> delegar, corregir, reconocer y evaluar son actos de liderazgo que exigen asertividad.</li>
+            <li><strong>Efecto multiplicador:</strong> la forma en que el líder comunica se replica en la cultura.</li>
+          </ul>
+        </div>
+
+        <div class="visual" aria-hidden="true">
+          <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="li1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffd966"/>
+                <stop offset="100%" stop-color="#c9a227"/>
+              </linearGradient>
+              <linearGradient id="li2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#4dd0e1"/>
+                <stop offset="100%" stop-color="#2d6cb5"/>
+              </linearGradient>
+            </defs>
+
+            <!-- hexagono de fondo -->
+            <polygon points="200,30 350,110 350,290 200,370 50,290 50,110"
+                     fill="none" stroke="rgba(255,217,102,.30)" stroke-width="1.5"/>
+            <polygon class="girar-lento" points="200,60 325,130 325,270 200,340 75,270 75,130"
+                     fill="none" stroke="rgba(77,208,225,.20)" stroke-dasharray="3 8"/>
+
+            <!-- lineas hacia equipo -->
+            <g stroke="rgba(255,217,102,.35)" stroke-width="1.2" fill="none">
+              <line x1="200" y1="200" x2="200" y2="90"/>
+              <line x1="200" y1="200" x2="310" y2="140"/>
+              <line x1="200" y1="200" x2="310" y2="260"/>
+              <line x1="200" y1="200" x2="200" y2="310"/>
+              <line x1="200" y1="200" x2="90"  y2="260"/>
+              <line x1="200" y1="200" x2="90"  y2="140"/>
+            </g>
+
+            <!-- lider centro -->
+            <circle cx="200" cy="200" r="46" fill="url(#li1)" opacity=".95"/>
+            <circle cx="200" cy="185" r="11" fill="#10243a"/>
+            <path d="M180 218 Q180 200 200 200 Q220 200 220 218 L220 226 L180 226 Z" fill="#10243a"/>
+
+            <!-- equipo -->
+            <g>
+              <circle class="pulse-dot"    cx="200" cy="90"  r="16" fill="url(#li2)"/>
+              <circle class="pulse-dot d2" cx="310" cy="140" r="14" fill="url(#li1)"/>
+              <circle class="pulse-dot d3" cx="310" cy="260" r="14" fill="url(#li2)"/>
+              <circle class="pulse-dot d4" cx="200" cy="310" r="16" fill="url(#li1)"/>
+              <circle class="pulse-dot d5" cx="90"  cy="260" r="14" fill="url(#li2)"/>
+              <circle class="pulse-dot"    cx="90"  cy="140" r="14" fill="url(#li1)"/>
+            </g>
+
+            <!-- pequenos iconos faciales -->
+            <g fill="#10243a" font-size="10" font-weight="800" text-anchor="middle">
+              <text x="200" y="94">A</text>
+              <text x="310" y="144">B</text>
+              <text x="310" y="264">C</text>
+              <text x="200" y="314">D</text>
+              <text x="90"  y="264">E</text>
+              <text x="90"  y="144">F</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       4. ¿QUÉ ES LA COMUNICACIÓN ASERTIVA?
+       ============================================================ -->
+  <section class="slide">
+    <div class="content">
+      <div class="slide-head">
+        <h2><span class="ico">💬</span>¿Qué es la Comunicación Asertiva?</h2>
+        <div class="rule"></div>
+      </div>
+
+      <div class="split">
+        <div class="texto">
+          <div class="quote">
+            Es la capacidad de expresar <strong>ideas, necesidades, opiniones y emociones</strong>
+            de forma <strong>clara, directa y respetuosa</strong>, defendiendo los propios derechos
+            sin vulnerar los de los demás.
+          </div>
+
+          <ul class="bullets">
+            <li><strong>Equilibrio:</strong> combina la <span class="gold">honestidad</span> (lo que digo) con el <span class="gold">respeto</span> (cómo lo digo).</li>
+            <li><strong>Tres pilares:</strong> escucha activa, empatía y congruencia verbal-no verbal.</li>
+            <li><strong>No es "decirlo todo":</strong> implica elegir qué, cómo, cuándo, dónde y a quién.</li>
+            <li><strong>Es entrenable:</strong> no es un rasgo de personalidad; se aprende y se practica.</li>
+          </ul>
+        </div>
+
+        <div class="visual" aria-hidden="true">
+          <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="bu1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#7f96ad"/>
+                <stop offset="100%" stop-color="#4a5d75"/>
+              </linearGradient>
+              <linearGradient id="bu2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ff7a7a"/>
+                <stop offset="100%" stop-color="#b83a3a"/>
+              </linearGradient>
+              <linearGradient id="bu3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffd966"/>
+                <stop offset="100%" stop-color="#c9a227"/>
+              </linearGradient>
+            </defs>
+
+            <!-- burbuja pasiva -->
+            <g class="pulse-dot">
+              <path d="M30 100 Q30 70 60 70 L160 70 Q190 70 190 100 L190 140 Q190 170 160 170 L90 170 L70 195 L70 170 L60 170 Q30 170 30 140 Z"
+                    fill="url(#bu1)" opacity=".9"/>
+              <text x="110" y="120" text-anchor="middle" font-size="12" font-weight="800" fill="#0a1626">PASIVA</text>
+              <text x="110" y="142" text-anchor="middle" font-size="10" fill="#0a1626">«…como tú digas»</text>
+            </g>
+
+            <!-- burbuja agresiva -->
+            <g class="pulse-dot d3">
+              <path d="M210 70 L310 70 Q340 70 340 100 L340 140 Q340 170 310 170 L300 170 L300 195 L280 170 L210 170 Q180 170 180 140 L180 100 Q180 70 210 70 Z"
+                    fill="url(#bu2)" opacity=".9"/>
+              <text x="260" y="118" text-anchor="middle" font-size="12" font-weight="800" fill="#2a0808">AGRESIVA</text>
+              <text x="260" y="140" text-anchor="middle" font-size="10" fill="#2a0808">«¡Porque yo lo digo!»</text>
+            </g>
+
+            <!-- burbuja asertiva grande -->
+            <g class="pulse-dot d5">
+              <path d="M60 220 L340 220 Q370 220 370 250 L370 320 Q370 350 340 350 L230 350 L200 385 L200 350 L60 350 Q30 350 30 320 L30 250 Q30 220 60 220 Z"
+                    fill="url(#bu3)"/>
+              <text x="200" y="272" text-anchor="middle" font-size="16" font-weight="800" fill="#10243a">ASERTIVA</text>
+              <text x="200" y="296" text-anchor="middle" font-size="11" font-weight="600" fill="#10243a">«Entiendo tu punto;</text>
+              <text x="200" y="314" text-anchor="middle" font-size="11" font-weight="600" fill="#10243a">necesito que acordemos…»</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       5. TABLA COMPARATIVA
+       ============================================================ -->
+  <section class="slide">
+    <div class="content">
+      <div class="slide-head">
+        <h2><span class="ico">⚖️</span>Pasiva vs. Agresiva vs. Asertiva</h2>
+        <div class="rule"></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="compare">
+          <thead>
+            <tr>
+              <th>Estilo</th>
+              <th>Qué hace</th>
+              <th>Cómo suena</th>
+              <th>Consecuencia en el equipo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="fila-pasiva">
+              <td><span class="face pasiva">◡</span>Pasiva</td>
+              <td><em>Calla lo que piensa, evita el conflicto, cede para no incomodar.</em></td>
+              <td>«No importa… como tú digas. Yo me adapto.»</td>
+              <td>Baja autoestima, resentimiento acumulado, tareas mal entendidas y acuerdos que nadie cumple.</td>
+            </tr>
+            <tr class="fila-agresiva">
+              <td><span class="face agresiva">✖</span>Agresiva</td>
+              <td><em>Impone, descalifica a la persona, usa el cargo como argumento.</em></td>
+              <td>«Eso está mal hecho. Hazlo así porque yo lo digo.»</td>
+              <td>Miedo, resistencia pasiva, clima tóxico, ocultamiento de errores y rotación de talento.</td>
+            </tr>
+            <tr class="fila-asertiva">
+              <td><span class="face asertiva">✔</span>Asertiva</td>
+              <td><em>Expresa hechos, impacto y necesidad con claridad y respeto.</em></td>
+              <td>«Entiendo tu punto; necesito que acordemos una fecha y yo me comprometo a…»</td>
+              <td>Confianza, acuerdos claros, compromiso real y aprendizaje continuo.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       6. IMPACTO EN LOS EQUIPOS
+       ============================================================ -->
+  <section class="slide">
+    <div class="content">
+      <div class="slide-head">
+        <h2><span class="ico">🤝</span>Impacto de la Comunicación Asertiva en los Equipos</h2>
+        <div class="rule"></div>
+      </div>
+
+      <div class="split">
+        <div class="texto">
+          <ul class="bullets">
+            <li><strong>Confianza y seguridad psicológica:</strong> las personas se atreven a opinar, preguntar y equivocarse sin temor.</li>
+            <li><strong>Menos conflictos destructivos:</strong> los problemas se abordan a tiempo.</li>
+            <li><strong>Claridad de roles:</strong> cada quien sabe qué se espera de él.</li>
+            <li><strong>Feedback que desarrolla:</strong> se percibe como ayuda y no como ataque.</li>
+            <li><strong>Mayor compromiso:</strong> el equipo se involucra por convicción, no por obligación.</li>
+            <li><strong>Coordinación eficiente:</strong> menos retrabajos y menos supuestos.</li>
+          </ul>
+        </div>
+
+        <div class="visual" aria-hidden="true">
+          <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="nodo" cx="50%" cy="50%">
+                <stop offset="0%" stop-color="#ffd966"/>
+                <stop offset="100%" stop-color="#c9a227"/>
+              </radialGradient>
+              <radialGradient id="nodo2" cx="50%" cy="50%">
+                <stop offset="0%" stop-color="#4dd0e1"/>
+                <stop offset="100%" stop-color="#2d6cb5"/>
+              </radialGradient>
+            </defs>
+
+            <!-- red de conexiones -->
+            <g stroke="rgba(255,217,102,.35)" stroke-width="1.2" fill="none" class="brillo-nodo">
+              <line x1="200" y1="200" x2="90"  y2="90"/>
+              <line x1="200" y1="200" x2="310" y2="90"/>
+              <line x1="200" y1="200" x2="90"  y2="310"/>
+              <line x1="200" y1="200" x2="310" y2="310"/>
+              <line x1="90"  y1="90"  x2="310" y2="90"/>
+              <line x1="90"  y1="310" x2="310" y2="310"/>
+              <line x1="90"  y1="90"  x2="90"  y2="310"/>
+              <line x1="310" y1="90"  x2="310" y2="310"/>
+            </g>
+            <g stroke="rgba(77,208,225,.40)" stroke-width="1" fill="none">
+              <line x1="200" y1="200" x2="200" y2="40"/>
+              <line x1="200" y1="200" x2="200" y2="360"/>
+              <line x1="200" y1="200" x2="40"  y2="200"/>
+              <line x1="200" y1="200" x2="360" y2="200"/>
+            </g>
+
+            <!-- nodos externos -->
+            <g>
+              <circle class="pulse-dot"    cx="90"  cy="90"  r="22" fill="url(#nodo2)"/>
+              <circle class="pulse-dot d2" cx="310" cy="90"  r="22" fill="url(#nodo)"/>
+              <circle class="pulse-dot d3" cx="90"  cy="310" r="22" fill="url(#nodo)"/>
+              <circle class="pulse-dot d4" cx="310" cy="310" r="22" fill="url(#nodo2)"/>
+              <circle class="pulse-dot d5" cx="200" cy="40"  r="18" fill="url(#nodo)"/>
+              <circle class="pulse-dot"    cx="200" cy="360" r="18" fill="url(#nodo2)"/>
+              <circle class="pulse-dot d2" cx="40"  cy="200" r="18" fill="url(#nodo2)"/>
+              <circle class="pulse-dot d3" cx="360" cy="200" r="18" fill="url(#nodo)"/>
+            </g>
+
+            <!-- nodo central -->
+            <circle cx="200" cy="200" r="42" fill="url(#nodo)"/>
+            <circle cx="200" cy="200" r="42" fill="none" stroke="#ffd966" stroke-width="2" opacity=".8"/>
+            <text x="200" y="196" text-anchor="middle" font-size="12" font-weight="800" fill="#10243a">EQUIPO</text>
+            <text x="200" y="212" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">CONECTADO</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       7. CASOS - Tarjetas interactivas (click para voltear)
+       ============================================================ -->
+  <section class="slide">
+    <div class="content">
+      <div class="slide-head">
+        <h2><span class="ico">🧩</span>Casos Reales y Ejemplos Prácticos</h2>
+        <div class="rule"></div>
+      </div>
+
+      <p class="mini-title">👆 Toca o haz click en cada tarjeta para ver la versión asertiva</p>
+
+      <div class="flip-grid" id="flipGrid">
+        <div class="flip-card" tabindex="0">
+          <div class="flip-inner">
+            <div class="flip-face flip-front">
+              <span class="tag">✖ Sin asertividad</span>
+              <h4>Feedback de desempeño</h4>
+              <p>«Nunca entregas a tiempo, eres un desastre.»</p>
+              <span class="hint-flip">Click para voltear →</span>
+            </div>
+            <div class="flip-face flip-back">
+              <span class="tag">✔ Versión asertiva</span>
+              <h4>Feedback de desempeño</h4>
+              <p>«En los últimos tres informes la entrega se retrasó dos días. ¿Qué necesitas para cumplir la fecha acordada?»</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card" tabindex="0">
+          <div class="flip-inner">
+            <div class="flip-face flip-front">
+              <span class="tag">✖ Sin asertividad</span>
+              <h4>Conflicto entre colaboradores</h4>
+              <p>«Arréglenlo ustedes, yo no quiero saber nada.»</p>
+              <span class="hint-flip">Click para voltear →</span>
+            </div>
+            <div class="flip-face flip-back">
+              <span class="tag">✔ Versión asertiva</span>
+              <h4>Conflicto entre colaboradores</h4>
+              <p>«Escuchemos ambas versiones por separado y acordemos una solución con responsables y fechas.»</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card" tabindex="0">
+          <div class="flip-inner">
+            <div class="flip-face flip-front">
+              <span class="tag">✖ Sin asertividad</span>
+              <h4>Comunicar un cambio</h4>
+              <p>«Hay una reestructuración. Mañana les contamos más.»</p>
+              <span class="hint-flip">Click para voltear →</span>
+            </div>
+            <div class="flip-face flip-back">
+              <span class="tag">✔ Versión asertiva</span>
+              <h4>Comunicar un cambio</h4>
+              <p>«Habrá cambios en el área. Esto es lo que sabemos, esto lo que aún no, y esta la fecha en que volveremos a hablar.»</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card" tabindex="0">
+          <div class="flip-inner">
+            <div class="flip-face flip-front">
+              <span class="tag">✖ Sin asertividad</span>
+              <h4>Decir «no» sin dañar</h4>
+              <p>«No puedo, estoy muy ocupado.» (sin más contexto)</p>
+              <span class="hint-flip">Click para voltear →</span>
+            </div>
+            <div class="flip-face flip-back">
+              <span class="tag">✔ Versión asertiva</span>
+              <h4>Decir «no» sin dañar</h4>
+              <p>«No puedo asumir ese proyecto esta semana sin retrasar los actuales. Podemos revisarlo el lunes y priorizar juntos.»</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       8. BENEFICIOS PARA LA ORGANIZACIÓN
+       ============================================================ -->
+  <section class="slide">
+    <div class="content">
+      <div class="slide-head">
+        <h2><span class="ico">📊</span>Beneficios para la Organización</h2>
+        <div class="rule"></div>
+      </div>
+
+      <div class="cards">
+        <article class="card">
+          <span class="ico">📈</span>
+          <h3>Productividad</h3>
+          <p>Menos malentendidos y retrabajos, más foco en lo que realmente genera valor.</p>
+        </article>
+
+        <article class="card">
+          <span class="ico">🌤️</span>
+          <h3>Clima laboral</h3>
+          <p>Relaciones de confianza, menor tensión y un ambiente donde es seguro hablar.</p>
+        </article>
+
+        <article class="card">
+          <span class="ico">🔒</span>
+          <h3>Retención de talento</h3>
+          <p>Las personas renuncian a los jefes, no a las empresas. Comunicar bien retiene.</p>
+        </article>
+
+        <article class="card">
+          <span class="ico">⚖️</span>
+          <h3>Menos conflictos formales</h3>
+          <p>Disminuyen quejas, ausentismo y procesos disciplinarios evitables.</p>
+        </article>
+
+        <article class="card">
+          <span class="ico">🧠</span>
+          <h3>Aprendizaje continuo</h3>
+          <p>El error se convierte en información útil y no en motivo de castigo.</p>
+        </article>
+
+        <article class="card">
+          <span class="ico">🎯</span>
+          <h3>Alineación estratégica</h3>
+          <p>Los objetivos del negocio llegan claros y con sentido hasta el último nivel.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       9. BARRERAS COMUNES
+       ============================================================ -->
+  <section class="slide">
+    <div class="content">
+      <div class="slide-head">
+        <h2><span class="ico">🚧</span>Barreras Comunes al Comunicar Asertivamente</h2>
+        <div class="rule"></div>
+      </div>
+
+      <div class="split">
+        <div class="texto">
+          <ul class="bullets">
+            <li><strong>Miedo al conflicto:</strong> «mejor no digo nada para no incomodar», y el problema crece en silencio.</li>
+            <li><strong>Cultura autoritaria:</strong> confundir liderazgo con imposición y jerarquía con razón.</li>
+            <li><strong>Falta de escucha:</strong> preparar la respuesta mientras el otro todavía habla.</li>
+            <li><strong>Emociones sin gestionar:</strong> responder en caliente, desde el juicio y no desde los hechos.</li>
+            <li><strong>Generalizaciones:</strong> usar «siempre», «nunca» o «tú eres…» en lugar de conductas observables.</li>
+            <li><strong>Canal inadecuado:</strong> tratar temas delicados por chat o en público.</li>
+            <li><strong>Falta de tiempo y hábito:</strong> se prioriza la urgencia sobre la conversación importante.</li>
+          </ul>
+        </div>
+
+        <div class="visual" aria-hidden="true">
+          <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="wall" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#2d6cb5"/>
+                <stop offset="100%" stop-color="#1e3a5f"/>
+              </linearGradient>
+              <linearGradient id="fig" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ff7a7a"/>
+                <stop offset="100%" stop-color="#b83a3a"/>
+              </linearGradient>
+            </defs>
+
+            <!-- muro -->
+            <rect x="40" y="120" width="320" height="230" rx="10" fill="url(#wall)" opacity=".85"/>
+            <g stroke="rgba(255,255,255,.12)" stroke-width="1.5">
+              <line x1="40" y1="170" x2="360" y2="170"/>
+              <line x1="40" y1="220" x2="360" y2="220"/>
+              <line x1="40" y1="270" x2="360" y2="270"/>
+              <line x1="40" y1="320" x2="360" y2="320"/>
+              <line x1="120" y1="120" x2="120" y2="170"/>
+              <line x1="200" y1="120" x2="200" y2="170"/>
+              <line x1="280" y1="120" x2="280" y2="170"/>
+              <line x1="160" y1="170" x2="160" y2="220"/>
+              <line x1="240" y1="170" x2="240" y2="220"/>
+              <line x1="120" y1="220" x2="120" y2="270"/>
+              <line x1="200" y1="220" x2="200" y2="270"/>
+              <line x1="280" y1="220" x2="280" y2="270"/>
+              <line x1="160" y1="270" x2="160" y2="320"/>
+              <line x1="240" y1="270" x2="240" y2="320"/>
+            </g>
+
+            <!-- grietas -->
+            <path d="M200 120 L190 160 L210 195 L185 240 L205 290 L190 350"
+                  stroke="#ffd966" stroke-width="2.5" fill="none" opacity=".75"/>
+            <path d="M190 160 L150 180" stroke="#ffd966" stroke-width="2" fill="none" opacity=".6"/>
+            <path d="M210 195 L260 210" stroke="#ffd966" stroke-width="2" fill="none" opacity=".6"/>
+            <path d="M185 240 L140 260" stroke="#ffd966" stroke-width="2" fill="none" opacity=".6"/>
+
+            <!-- figuras bloqueadas -->
+            <g class="pulse-dot" transform="translate(90, 260)">
+              <circle cx="0" cy="0" r="14" fill="url(#fig)"/>
+              <rect x="-16" y="12" width="32" height="26" rx="6" fill="url(#fig)"/>
+            </g>
+            <g class="pulse-dot d3" transform="translate(310, 260)">
+              <circle cx="0" cy="0" r="14" fill="url(#fig)"/>
+              <rect x="-16" y="12" width="32" height="26" rx="6" fill="url(#fig)"/>
+            </g>
+
+            <!-- texto -->
+            <text x="200" y="80" text-anchor="middle" font-size="14" font-weight="800" fill="#ffd966">BARRERAS</text>
+            <text x="200" y="100" text-anchor="middle" font-size="11" fill="#b9cde3">que bloquean la comunicación</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       10. TÉCNICAS Y HERRAMIENTAS (DESC interactivo)
+       ============================================================ -->
+  <section class="slide">
+    <div class="content">
+      <div class="slide-head">
+        <h2><span class="ico">🛠️</span>Técnicas y Herramientas para Líderes Asertivos</h2>
+        <div class="rule"></div>
+      </div>
+
+      <p class="mini-title">Método D.E.S.C. — 👆 haz click en cada paso para ver el ejemplo</p>
+
+      <div class="steps" id="stepsDesc">
+        <div class="step" tabindex="0">
+          <span class="letter">D</span>
+          <h3>Describir los hechos</h3>
+          <p class="detalle">Sin juicios ni adjetivos: <em>«En la reunión del martes no se presentó el avance acordado.»</em></p>
+        </div>
+        <div class="step" tabindex="0">
+          <span class="letter">E</span>
+          <h3>Expresar el impacto</h3>
+          <p class="detalle">Cómo afecta y cómo te hace sentir: <em>«Me preocupa, porque el equipo depende de esa información.»</em></p>
+        </div>
+        <div class="step" tabindex="0">
+          <span class="letter">S</span>
+          <h3>Sugerir una solución</h3>
+          <p class="detalle">Propón, no impongas: <em>«¿Qué te parece si revisamos avances cada viernes?»</em></p>
+        </div>
+        <div class="step" tabindex="0">
+          <span class="letter">C</span>
+          <h3>Consecuencia y compromiso</h3>
+          <p class="detalle">Cierra el acuerdo: <em>«Así evitamos retrasos y ganamos claridad para todos.»</em></p>
+        </div>
+      </div>
+
+      <p class="mini-title">Otras herramientas clave</p>
+      <ul class="bullets">
+        <li><strong>Escucha activa:</strong> parafrasea («si entiendo bien, lo que te preocupa es…») antes de responder.</li>
+        <li><strong>Mensajes en primera persona:</strong> «yo necesito», «yo siento», en lugar de «tú nunca», «tú siempre».</li>
+        <li><strong>Modelo SBI para feedback:</strong> Situación → Comportamiento → Impacto.</li>
+        <li><strong>Preguntas abiertas:</strong> «¿cómo lo ves tú?», «¿qué necesitas para lograrlo?».</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       11. CONCLUSIONES
+       ============================================================ -->
+  <section class="slide">
+    <div class="content">
+      <div class="slide-head">
+        <h2><span class="ico">🔑</span>Conclusiones Clave</h2>
+        <div class="rule"></div>
+      </div>
+
+      <div class="split">
+        <div class="texto">
+          <ul class="bullets">
+            <li>La gestión del talento humano se ejecuta, en la práctica, <strong>a través de conversaciones</strong>: seleccionar, orientar, evaluar, motivar y retener son actos comunicativos.</li>
+            <li>La comunicación asertiva es una <strong>competencia de liderazgo</strong>, no un detalle de cortesía.</li>
+            <li>Ser asertivo <strong>reduce el conflicto destructivo</strong> y aumenta claridad, confianza y compromiso.</li>
+            <li>Un líder que escucha y comunica con respeto <strong>retiene talento</strong> y construye cultura sostenible.</li>
+            <li>La asertividad <strong>se entrena</strong>: método (DESC, SBI), práctica deliberada y feedback continuo.</li>
+          </ul>
+        </div>
+
+        <div class="visual" aria-hidden="true">
+          <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="luz" cx="50%" cy="40%">
+                <stop offset="0%" stop-color="#ffd966" stop-opacity=".9"/>
+                <stop offset="100%" stop-color="#c9a227" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="amp" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#4dd0e1"/>
+                <stop offset="100%" stop-color="#2d6cb5"/>
+              </linearGradient>
+            </defs>
+
+            <!-- rayos de luz -->
+            <circle cx="200" cy="170" r="150" fill="url(#luz)" opacity=".9"/>
+            <g class="girar-lento" style="transform-origin: 200px 170px;">
+              <g stroke="#ffd966" stroke-width="2" stroke-linecap="round" opacity=".75">
+                <line x1="200" y1="30"  x2="200" y2="10"/>
+                <line x1="280" y1="60"  x2="295" y2="45"/>
+                <line x1="330" y1="140" x2="350" y2="140"/>
+                <line x1="330" y1="220" x2="350" y2="230"/>
+                <line x1="120" y1="60"  x2="105" y2="45"/>
+                <line x1="70"  y1="140" x2="50"  y2="140"/>
+                <line x1="70"  y1="220" x2="50"  y2="230"/>
+              </g>
+            </g>
+
+            <!-- bombilla -->
+            <circle cx="200" cy="170" r="65" fill="url(#amp)" opacity=".9"/>
+            <circle cx="200" cy="170" r="65" fill="none" stroke="#ffd966" stroke-width="2" opacity=".7"/>
+            <path d="M180 235 L220 235 L212 270 L188 270 Z" fill="#4a5d75"/>
+            <rect x="188" y="270" width="24" height="6" rx="2" fill="#4a5d75"/>
+            <rect x="188" y="280" width="24" height="6" rx="2" fill="#4a5d75"/>
+            <rect x="188" y="290" width="24" height="6" rx="2" fill="#4a5d75"/>
+            <text x="200" y="178" text-anchor="middle" font-size="20" font-weight="800" fill="#10243a">IDEA</text>
+
+            <!-- texto inferior -->
+            <text x="200" y="345" text-anchor="middle" font-size="13" font-weight="700" fill="#ffd966">LIDERAR = COMUNICAR</text>
+            <text x="200" y="365" text-anchor="middle" font-size="11" fill="#b9cde3">con claridad y respeto</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       12. CIERRE Y REFERENCIAS
+       ============================================================ -->
+  <section class="slide">
+    <div class="content center">
+      <p class="eyebrow">Mensaje final</p>
+      <p class="final-msg">
+        «Liderar es, en esencia, <span class="gold">comunicar</span>. Quien comunica con
+        claridad y respeto cuida el talento, y quien cuida el talento construye
+        organizaciones que <span class="gold">crecen y permanecen</span>.»
+      </p>
+
+      <div class="rule"></div>
+
+      <div class="refs">
+        <p class="mini-title">Referencias bibliográficas sugeridas</p>
+        <ul class="refs">
+          <li>Chiavenato, I. (2020). <em>Gestión del Talento Humano</em>. McGraw-Hill Interamericana.</li>
+          <li>Robbins, S. P. y Judge, T. A. (2017). <em>Comportamiento Organizacional</em> (17.ª ed.). Pearson Educación.</li>
+          <li>Goleman, D. (1995). <em>La Inteligencia Emocional</em>. Editorial Kairós.</li>
+          <li>Covey, S. R. (1989). <em>Los 7 hábitos de la gente altamente efectiva</em>. Paidós.</li>
+        </ul>
+      </div>
+
+      <p class="hint">
+        Lic. Brayan Alvarez · Gracias por su atención · <kbd>←</kbd> para volver a revisar
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ================= CONTROLES ================= -->
+<nav class="controls" aria-label="Navegación de la presentación">
+  <button class="nav" id="prev" type="button" aria-label="Diapositiva anterior">‹ Anterior</button>
+
+  <div class="dots" id="dots" role="tablist" aria-label="Ir a diapositiva"></div>
+
+  <div class="counter" aria-live="polite">
+    <span class="actual" id="current">1</span> / <span id="total">12</span>
+  </div>
+
+  <button class="nav" id="next" type="button" aria-label="Diapositiva siguiente">Siguiente ›</button>
+</nav>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ============================================================
+     PARTÍCULAS FLOTANTES
+     ============================================================ */
+  (function crearParticulas() {
+    var cont = document.getElementById("particles");
+    if (!cont) return;
+    var n = 18;
+    for (var i = 0; i < n; i++) {
+      var p = document.createElement("i");
+      p.style.left = Math.random() * 100 + "%";
+      p.style.animationDuration = (10 + Math.random() * 16) + "s";
+      p.style.animationDelay = (-Math.random() * 20) + "s";
+      var s = 2 + Math.random() * 3;
+      p.style.width = s + "px";
+      p.style.height = s + "px";
+      if (Math.random() > .6) p.style.background = "#4dd0e1";
+      cont.appendChild(p);
+    }
+  })();
+
+  /* ============================================================
+     NAVEGACIÓN PRINCIPAL
+     ============================================================ */
+  var slides    = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+  var total     = slides.length;
+  var index     = 0;
+
+  var fill      = document.getElementById("progressFill");
+  var elCurrent = document.getElementById("current");
+  var elTotal   = document.getElementById("total");
+  var btnPrev   = document.getElementById("prev");
+  var btnNext   = document.getElementById("next");
+  var dotsBox   = document.getElementById("dots");
+
+  elTotal.textContent = total;
+
+  /* ---------- Crear los puntos de navegación ---------- */
+  slides.forEach(function (_, i) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.setAttribute("aria-label", "Ir a diapositiva " + (i + 1));
+    b.addEventListener("click", function () { go(i); });
+    dotsBox.appendChild(b);
+  });
+  var dotEls = Array.prototype.slice.call(dotsBox.children);
+
+  /* ---------- Render ---------- */
+  function render() {
+    slides.forEach(function (slide, i) {
+      var activo = i === index;
+      slide.classList.toggle("is-active", activo);
+      slide.setAttribute("aria-hidden", activo ? "false" : "true");
+    });
+
+    dotEls.forEach(function (d, i) {
+      d.classList.toggle("activo", i === index);
+      d.setAttribute("aria-current", i === index ? "true" : "false");
+    });
+
+    elCurrent.textContent = index + 1;
+    fill.style.width = ((index + 1) / total) * 100 + "%";
+
+    btnPrev.disabled = index === 0;
+    btnNext.disabled = index === total - 1;
+
+    slides[index].scrollTop = 0;
+  }
+
+  /* ---------- Ir a ---------- */
+  function go(n) {
+    if (n < 0 || n > total - 1 || n === index) return;
+    index = n;
+    render();
+  }
+  function next() { go(index + 1); }
+  function prev() { go(index - 1); }
+
+  btnNext.addEventListener("click", function () { next(); this.blur(); });
+  btnPrev.addEventListener("click", function () { prev(); this.blur(); });
+
+  /* ---------- Teclado ---------- */
+  document.addEventListener("keydown", function (e) {
+    var k = e.key;
+
+    /* No interceptar si el foco está en un input (por si se añaden luego) */
+    var tag = (e.target && e.target.tagName) || "";
+    if (tag === "INPUT" || tag === "TEXTAREA") return;
+
+    if (k === "ArrowRight" || k === "ArrowDown" || k === " " ||
+        k === "Spacebar" || k === "PageDown") {
+      e.preventDefault(); next();
+    } else if (k === "ArrowLeft" || k === "ArrowUp" || k === "PageUp") {
+      e.preventDefault(); prev();
+    } else if (k === "Home") {
+      e.preventDefault(); go(0);
+    } else if (k === "End") {
+      e.preventDefault(); go(total - 1);
+    } else if (k === "f" || k === "F") {
+      toggleFullscreen();
+    }
+  });
+
+  /* ---------- Pantalla completa ---------- */
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+      }
+    } else if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  }
+
+  /* ---------- Swipe táctil ---------- */
+  var startX = 0, startY = 0;
+  document.addEventListener("touchstart", function (e) {
+    startX = e.changedTouches[0].clientX;
+    startY = e.changedTouches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener("touchend", function (e) {
+    var dx = e.changedTouches[0].clientX - startX;
+    var dy = e.changedTouches[0].clientY - startY;
+    if (Math.abs(dx) > 65 && Math.abs(dx) > Math.abs(dy)) {
+      if (dx < 0) { next(); } else { prev(); }
+    }
+  }, { passive: true });
+
+  /* ---------- Rueda del ratón (con bloqueo) ---------- */
+  var lock = false;
+  window.addEventListener("wheel", function (e) {
+    if (lock) return;
+    if (Math.abs(e.deltaY) < 22) return;
+    var slide = slides[index];
+    var puedeScroll = slide.scrollHeight > slide.clientHeight + 4;
+
+    if (puedeScroll) {
+      var atTop = slide.scrollTop <= 0;
+      var atBottom = slide.scrollTop + slide.clientHeight >= slide.scrollHeight - 2;
+      if (!(e.deltaY > 0 && atBottom) && !(e.deltaY < 0 && atTop)) return;
+    }
+
+    lock = true;
+    if (e.deltaY > 0) { next(); } else { prev(); }
+    setTimeout(function () { lock = false; }, 720);
+  }, { passive: true });
+
+  /* ============================================================
+     INTERACTIVIDAD 1: Tarjetas flip (Casos)
+     ============================================================ */
+  Array.prototype.slice.call(document.querySelectorAll(".flip-card")).forEach(function (card) {
+    function flip() { card.classList.toggle("flipped"); }
+    card.addEventListener("click", flip);
+    card.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        flip();
+      }
+    });
+  });
+
+  /* ============================================================
+     INTERACTIVIDAD 2: Pasos DESC (expandibles)
+     ============================================================ */
+  Array.prototype.slice.call(document.querySelectorAll(".step")).forEach(function (step) {
+    function toggle() {
+      /* Comportamiento acordeón: cierra los demás */
+      var hermanos = step.parentNode.querySelectorAll(".step");
+      Array.prototype.slice.call(hermanos).forEach(function (h) {
+        if (h !== step) h.classList.remove("abierto");
+      });
+      step.classList.toggle("abierto");
+    }
+    step.addEventListener("click", toggle);
+    step.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        toggle();
+      }
+    });
+  });
+
+  /* ---------- Inicialización ---------- */
+  render();
+})();
+</script>
+</body>
+</html>
